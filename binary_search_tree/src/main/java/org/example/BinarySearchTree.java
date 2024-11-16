@@ -95,4 +95,31 @@ public class BinarySearchTree {
         return current;
     }
 
+    /*pre-order traversal*/
+    public void preorderTraversal(Node root) {
+        if (root != null) {
+            System.out.println(root.value + ", "); // visit value
+            preorderTraversal(root.left); //visit left subtree
+            preorderTraversal(root.right); //visit right subtree
+        }
+    }
+
+    /*in-order traversal*/
+    public void inorderTraversal(Node root) {
+        if (root != null) {
+            inorderTraversal(root.left); //visit left subtree
+            System.out.print(root.value + ", "); // visit value
+            inorderTraversal(root.right); //visit right subtree
+        }
+    }
+
+    /*post-order traversal*/
+    public void postorderTraversal(Node root) {
+        if (root != null) {
+            postorderTraversal(root.left); //visit left subtree
+            postorderTraversal(root.right); //visit right subtree
+            System.out.println(root.value + ", "); // visit value
+        }
+    }
+
 }
