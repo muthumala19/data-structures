@@ -3,9 +3,6 @@ package org.example;
 public class BinarySearchTree {
     private Node root;
 
-    public BinarySearchTree() {
-    }
-
     public BinarySearchTree(Node root) {
         this.root = root;
     }
@@ -49,50 +46,87 @@ public class BinarySearchTree {
 
     /*delete node with given key if found, else do nothing.return root*/
     public Node delete(Node root, int value) {
-        //base case
         if (root == null) {
-            return null;
+            return root;
         }
 
-        if (value == root.value) {
-            //if no child presents
-            if (root.left == null && root.right == null) {
-                return null;
-            }
-            //if only left child presents
-            else if (root.right == null) {
-                return root.left;
-            }
-            //if only right child presents
-            else if (root.left == null) {
-                return root.right;
-            }
-            //if both children presents
-            else {
-                Node successor = findSuccessor(root);
-                root.value = successor.value;
-                root.right = delete(root.right, successor.value);
-            }
-        }
-        //traverse left subtree to delete node
-        else if (value < root.value) {
+        if (value < root.value) {
             root.left = delete(root.left, value);
-        }
-        //traverse right subtree to delete node
-        else {
+        } else if (value > root.value) {
             root.right = delete(root.right, value);
-        }
+        } else { // Node to be deleted found
+            if (root.left == null) {
+                return root.right; // No left child, return right child
+            } else if (root.right == null) {
+                return root.left; // No right child, return left child
+            }
 
+            // Node has two children, find the successor (smallest in the right subtree)
+            Node successor = findSuccessor(root);
+            root.value = successor.value;
+            root.right = delete(root.right, successor.value); // Remove the successor
+        }
         return root;
     }
 
     /*method to find the successor*/
-    private Node findSuccessor(Node root) {
-        Node current = root.right;
-        while (current.left != null) {
-            current = current.left;
+    private Node findSuccessor(Node node) {
+        if (node.right != null) {
+            // Case 1: Node has a right subtree
+            Node current = node.right;
+            while (current.left != null) {
+                current = current.left;
+            }
+            return current;
         }
-        return current;
+
+        // Case 2: Node does not have a right subtree
+        Node successor = null;
+        Node current = this.root;
+        while (current != null) {
+            if (node.value < current.value) {
+                successor = current;  // Update successor
+                current = current.left;
+            } else if (node.value > current.value) {
+                current = current.right;
+            } else {
+                break;
+            }
+        }
+        return successor;
+    }
+
+    /*method to find the predecessor*/
+    private Node findPredecessor(Node node) {
+        // Case 1: Node has a left subtree
+        if (node.left != null) {
+            // Find the largest node in the left subtree (rightmost node)
+            Node current = node.left;
+            while (current.right != null) {
+                current = current.right;
+            }
+            return current;
+        }
+
+        // Case 2: Node does not have a left subtree
+        Node predecessor = null;
+        Node current = this.root;  // Start from the root of the BST
+
+        // Traverse the tree to find the predecessor
+        while (current != null) {
+            if (node.value > current.value) {
+                predecessor = current;  // Update predecessor
+                current = current.right;
+            } else if (node.value < current.value) {
+                current = current.left;
+            } else {
+                // Node is found, break the loop
+                break;
+            }
+        }
+
+        // Return the predecessor node
+        return predecessor;
     }
 
     /*pre-order traversal*/

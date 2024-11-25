@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        int n = 50;
+        int n = 500;
         Random random = new Random();
         BinarySearchTree bst = new BinarySearchTree();
         Node root = null; // Initialize a local root variable
@@ -13,6 +13,12 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int randomNumber = random.nextInt(1001);
             root = bst.insert(root, randomNumber); // Update the local root
+        }
+
+        // Delete from BST
+        for (int i = 0; i < n; i++) {
+            int randomNumber = random.nextInt(1001);
+            root = bst.delete(root, randomNumber);
         }
 
         //inorder traversal
